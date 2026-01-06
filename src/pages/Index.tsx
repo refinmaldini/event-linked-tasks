@@ -399,9 +399,11 @@ const Index: React.FC = () => {
             <TaskListView 
               tasks={tasks} 
               users={users} 
-              columns={kanbanColumns} 
+              columns={kanbanColumns}
+              events={events}
               onStatusChange={handleStatusChange} 
-              onTaskClick={t => { setEditingTask(t); setIsTaskModalOpen(true); }} 
+              onTaskClick={t => { setEditingTask(t); setIsTaskModalOpen(true); }}
+              onEventClick={e => { setEditingEvent(e); setIsEventModalOpen(true); }}
             />
           )}
           {activeTab === 'calendar' && (
