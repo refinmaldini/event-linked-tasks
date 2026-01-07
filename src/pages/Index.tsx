@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Layout, Users, CheckSquare, Calendar as CalendarIcon, CalendarDays,
-  LogOut, Plus, Briefcase, Zap, History
+  LogOut, Plus, Briefcase, Zap, History, Settings2
 } from 'lucide-react';
 import { Task, User, TaskStatus, Event, KanbanColumn, EventTypeConfig, ActivityLog } from '../types';
 import { KanbanBoard } from '../components/KanbanBoard';
@@ -14,6 +14,7 @@ import { LoginView } from '../components/LoginView';
 import { CreateTaskModal } from '../components/CreateTaskModal';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { CreateUserModal } from '../components/CreateUserModal';
+import { EventTypeModal } from '../components/EventTypeModal';
 import { SettingsMenu } from '../components/SettingsMenu';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -66,7 +67,8 @@ const Index: React.FC = () => {
   const [activities, setActivities] = useState<ActivityLog[]>(() => loadState('kerja_activities', []));
   
   const [kanbanColumns] = useState<KanbanColumn[]>(INITIAL_COLUMNS);
-  const [eventTypes] = useState<EventTypeConfig[]>(INITIAL_EVENT_TYPES);
+  const [eventTypes, setEventTypes] = useState<EventTypeConfig[]>(() => loadState('kerja_event_types', INITIAL_EVENT_TYPES));
+  const [isEventTypeModalOpen, setIsEventTypeModalOpen] = useState(false);
   
   // Modal States
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -101,13 +103,14 @@ const Index: React.FC = () => {
     localStorage.setItem('kerja_events', JSON.stringify(events));
     localStorage.setItem('kerja_users', JSON.stringify(users));
     localStorage.setItem('kerja_activities', JSON.stringify(activities));
+    localStorage.setItem('kerja_event_types', JSON.stringify(eventTypes));
     
     if (currentUser) {
       localStorage.setItem('kerja_session', currentUser.id);
     } else {
       localStorage.removeItem('kerja_session');
     }
-  }, [tasks, events, users, activities, currentUser]);
+  }, [tasks, events, users, activities, currentUser, eventTypes]);
 
   // --- HANDLERS ---
   const handleLogin = (user: User) => {
@@ -364,12 +367,20 @@ const Index: React.FC = () => {
           </div>
           <div className="flex gap-3">
             {activeTab === 'events' && (
-              <button 
-                onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }} 
-                className="bg-foreground text-background px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-colors"
-              >
-                <Plus size={18} /> {t('addEvent')}
-              </button>
+              <>
+                <button 
+                  onClick={() => setIsEventTypeModalOpen(true)} 
+                  className="bg-muted text-foreground px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-muted/80 transition-colors"
+                >
+                  <Settings2 size={18} /> {t('manageEventTypes')}
+                </button>
+                <button 
+                  onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }} 
+                  className="bg-foreground text-background px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-colors"
+                >
+                  <Plus size={18} /> {t('addEvent')}
+                </button>
+              </>
             )}
             {activeTab === 'team' && currentUser.role === 'Owner' && (
               <button 
@@ -482,6 +493,12 @@ const Index: React.FC = () => {
         onClose={() => { setIsUserModalOpen(false); setEditingUser(null); }} 
         onSave={handleSaveUser} 
         userToEdit={editingUser} 
+      />
+      <EventTypeModal
+        isOpen={isEventTypeModalOpen}
+        onClose={() => setIsEventTypeModalOpen(false)}
+        eventTypes={eventTypes}
+        onSave={setEventTypes}
       />
     </div>
   );

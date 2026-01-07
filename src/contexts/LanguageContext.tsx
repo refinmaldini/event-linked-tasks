@@ -72,6 +72,11 @@ const translations = {
     workshop: 'Workshop',
     deadline: 'Deadline',
     presentation: 'Presentation',
+    eventTypes: 'Event Types',
+    addEventType: 'Add New Type',
+    typeName: 'Type name',
+    noEventTypes: 'No event types yet',
+    manageEventTypes: 'Manage Types',
     
     // Team
     role: 'Role',
@@ -176,6 +181,11 @@ const translations = {
     workshop: 'Workshop',
     deadline: 'Tenggat',
     presentation: 'Presentasi',
+    eventTypes: 'Tipe Acara',
+    addEventType: 'Tambah Tipe Baru',
+    typeName: 'Nama tipe',
+    noEventTypes: 'Belum ada tipe acara',
+    manageEventTypes: 'Kelola Tipe',
     
     // Team
     role: 'Peran',
