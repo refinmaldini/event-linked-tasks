@@ -14,6 +14,8 @@ import { LoginView } from '../components/LoginView';
 import { CreateTaskModal } from '../components/CreateTaskModal';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { CreateUserModal } from '../components/CreateUserModal';
+import { SettingsMenu } from '../components/SettingsMenu';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // --- HELPERS ---
 const getAvatar = (name: string) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=10b981&color=fff&size=128`;
@@ -52,6 +54,7 @@ const INITIAL_EVENT_TYPES: EventTypeConfig[] = [
 ];
 
 const Index: React.FC = () => {
+  const { t } = useLanguage();
   // -- AUTH STATE --
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>(() => loadState('kerja_users', [DEFAULT_ADMIN])); 
@@ -263,12 +266,12 @@ const Index: React.FC = () => {
   }
 
   const NAV_ITEMS = [
-    { id: 'kanban', label: 'Kanban', icon: Layout },
-    { id: 'team', label: 'Team', icon: Users },
-    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-    { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
-    { id: 'events', label: 'Events', icon: CalendarDays },
-    { id: 'activity', label: 'Activity', icon: History },
+    { id: 'kanban', label: t('kanban'), icon: Layout },
+    { id: 'team', label: t('team'), icon: Users },
+    { id: 'tasks', label: t('tasks'), icon: CheckSquare },
+    { id: 'calendar', label: t('calendar'), icon: CalendarIcon },
+    { id: 'events', label: t('events'), icon: CalendarDays },
+    { id: 'activity', label: t('activity'), icon: History },
   ];
 
   return (
@@ -309,8 +312,11 @@ const Index: React.FC = () => {
             onClick={handleGlobalAddTask}
             className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-all text-sm"
           >
-            <Plus size={18} /> Add Task
+            <Plus size={18} /> {t('addTask')}
           </button>
+
+          {/* Settings Menu */}
+          <SettingsMenu />
 
           <div className="bg-muted rounded-full px-3 py-1.5 flex items-center gap-2 ml-2">
             <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold uppercase">
@@ -321,8 +327,8 @@ const Index: React.FC = () => {
           
           <button 
             onClick={handleLogout} 
-            className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" 
-            title="Logout"
+            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors" 
+            title={t('logout')}
           >
             <LogOut size={18} />
           </button>
@@ -352,8 +358,8 @@ const Index: React.FC = () => {
             <h1 className="text-3xl font-bold capitalize">
               {NAV_ITEMS.find(i => i.id === activeTab)?.label}
             </h1>
-            <p className="text-muted-foreground flex items-center gap-2">
-              <Briefcase size={14} /> Main Workspace
+          <p className="text-muted-foreground flex items-center gap-2">
+              <Briefcase size={14} /> {t('mainWorkspace')}
             </p>
           </div>
           <div className="flex gap-3">
@@ -362,7 +368,7 @@ const Index: React.FC = () => {
                 onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }} 
                 className="bg-foreground text-background px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-colors"
               >
-                <Plus size={18} /> Add Event
+                <Plus size={18} /> {t('addEvent')}
               </button>
             )}
             {activeTab === 'team' && currentUser.role === 'Owner' && (
@@ -370,7 +376,7 @@ const Index: React.FC = () => {
                 onClick={() => { setEditingUser(null); setIsUserModalOpen(true); }} 
                 className="bg-foreground text-background px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-colors"
               >
-                <Plus size={18} /> Add Member
+                <Plus size={18} /> {t('addMember')}
               </button>
             )}
           </div>
@@ -431,19 +437,19 @@ const Index: React.FC = () => {
 
       {/* No Events Warning Banner */}
       {events.length === 0 && (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-amber-50 border border-amber-200 rounded-xl p-4 shadow-lg z-40">
+        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-accent border border-primary/20 rounded-xl p-4 shadow-lg z-40">
           <div className="flex items-start gap-3">
-            <CalendarDays className="text-amber-600 flex-shrink-0 mt-0.5" size={20} />
+            <CalendarDays className="text-primary flex-shrink-0 mt-0.5" size={20} />
             <div>
-              <h4 className="font-bold text-amber-800">Create an Event First!</h4>
-              <p className="text-sm text-amber-700 mt-1">
-                You need to create at least one event before adding tasks. Tasks must be linked to an event.
+              <h4 className="font-bold text-foreground">{t('createEventFirst')}</h4>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t('needEventFirst')}
               </p>
               <button 
                 onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }}
-                className="mt-3 bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-amber-700 transition-colors"
+                className="mt-3 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-colors"
               >
-                Create First Event
+                {t('createFirstEvent')}
               </button>
             </div>
           </div>
