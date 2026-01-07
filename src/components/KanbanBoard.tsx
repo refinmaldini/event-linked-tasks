@@ -1,15 +1,17 @@
-import React from 'react';
-import { Task, User, TaskStatus, KanbanColumn } from '../types';
-import { Calendar, Plus, CheckSquare, Flag, AlertCircle, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Task, User, TaskStatus, KanbanColumn, Event } from '../types';
+import { Calendar, Plus, CheckSquare, Flag, AlertCircle, Clock, X, MapPin, Users, CalendarDays } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface KanbanBoardProps {
   tasks: Task[];
   users: User[];
   columns: KanbanColumn[];
+  events: Event[];
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onAddTask: (status: TaskStatus) => void;
   onTaskClick: (task: Task) => void;
+  onEventClick?: (event: Event) => void;
 }
 
 const THEME_STYLES: Record<string, { bg: string; text: string }> = {
@@ -37,13 +39,35 @@ const THEME_STYLES: Record<string, { bg: string; text: string }> = {
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({ 
   tasks, 
   users, 
-  columns, 
+  columns,
+  events,
   onStatusChange, 
   onAddTask, 
-  onTaskClick 
+  onTaskClick,
+  onEventClick
 }) => {
+  const [previewEvent, setPreviewEvent] = useState<Event | null>(null);
+  
   const getTasksByStatus = (status: TaskStatus) => tasks.filter((t) => t.status === status);
   const getUser = (id: string) => users.find((u) => u.id === id);
+  const getEventByName = (eventName: string) => events.find((e) => e.title === eventName);
+
+  const handleEventBadgeClick = (e: React.MouseEvent, eventName: string) => {
+    e.stopPropagation();
+    const event = getEventByName(eventName);
+    if (event) {
+      setPreviewEvent(event);
+    }
+  };
+
+  const formatEventDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString('id-ID', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     e.dataTransfer.setData('taskId', taskId);
@@ -163,10 +187,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       {/* Event Badge */}
                       {task.eventName && (
                         <div className="mb-2 pl-2">
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-accent text-accent-foreground rounded-full text-[10px] font-medium">
+                          <button
+                            onClick={(e) => handleEventBadgeClick(e, task.eventName!)}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 bg-accent text-accent-foreground rounded-full text-[10px] font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                          >
                             <Calendar size={10} />
                             {task.eventName}
-                          </span>
+                          </button>
                         </div>
                       )}
                       
@@ -219,6 +246,104 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           </div>
         );
       })}
+
+      {/* Event Preview Modal */}
+      <AnimatePresence>
+        {previewEvent && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setPreviewEvent(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-card rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-border"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-primary to-primary/80 p-4 text-primary-foreground">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-xs font-medium bg-white/20 px-2 py-0.5 rounded-full">
+                      {previewEvent.type}
+                    </span>
+                    <h3 className="text-lg font-bold mt-2">{previewEvent.title}</h3>
+                    {previewEvent.clientName && (
+                      <p className="text-sm opacity-90">{previewEvent.clientName}</p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setPreviewEvent(null)}
+                    className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-4 space-y-3">
+                <div className="flex items-center gap-3 text-sm">
+                  <CalendarDays size={16} className="text-muted-foreground" />
+                  <span>{formatEventDate(previewEvent.date)}</span>
+                </div>
+                
+                {previewEvent.startTime && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <Clock size={16} className="text-muted-foreground" />
+                    <span>{previewEvent.startTime}{previewEvent.endTime ? ` - ${previewEvent.endTime}` : ''}</span>
+                  </div>
+                )}
+                
+                {previewEvent.location && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <MapPin size={16} className="text-muted-foreground" />
+                    <span>{previewEvent.location}</span>
+                  </div>
+                )}
+                
+                {previewEvent.attendees && previewEvent.attendees.length > 0 && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <Users size={16} className="text-muted-foreground" />
+                    <span>{previewEvent.attendees.length} attendee(s)</span>
+                  </div>
+                )}
+
+                {previewEvent.description && (
+                  <div className="pt-3 border-t border-border">
+                    <p className="text-sm text-muted-foreground">{previewEvent.description}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="p-4 border-t border-border flex gap-2">
+                <button
+                  onClick={() => setPreviewEvent(null)}
+                  className="flex-1 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+                >
+                  Tutup
+                </button>
+                {onEventClick && (
+                  <button
+                    onClick={() => {
+                      onEventClick(previewEvent);
+                      setPreviewEvent(null);
+                    }}
+                    className="flex-1 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                  >
+                    Edit Event
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
