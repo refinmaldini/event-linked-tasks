@@ -381,10 +381,12 @@ const Index: React.FC = () => {
             <KanbanBoard 
               tasks={tasks} 
               users={users} 
-              columns={kanbanColumns} 
+              columns={kanbanColumns}
+              events={events}
               onStatusChange={handleStatusChange} 
               onAddTask={s => { setTaskInitialStatus(s); setEditingTask(null); setIsTaskModalOpen(true); }} 
-              onTaskClick={t => { setEditingTask(t); setIsTaskModalOpen(true); }} 
+              onTaskClick={t => { setEditingTask(t); setIsTaskModalOpen(true); }}
+              onEventClick={e => { setEditingEvent(e); setIsEventModalOpen(true); }}
             />
           )}
           {activeTab === 'team' && (
