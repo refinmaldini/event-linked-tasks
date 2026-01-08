@@ -99,7 +99,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-bold text-foreground mb-1">Event Type</label>
             <select 
@@ -122,7 +122,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 p-3 bg-accent rounded-xl border border-primary/20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 bg-accent rounded-xl border border-primary/20">
           <div>
             <label className="block text-[10px] font-bold text-primary uppercase mb-1">Start Date</label>
             <input 
@@ -150,7 +150,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-bold text-foreground mb-1">Start Time</label>
             <input 
@@ -206,14 +206,14 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
           />
         </div>
 
-        <div className="pt-6 flex justify-between items-center border-t border-border">
+        <div className="pt-4 sm:pt-6 flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 border-t border-border">
           {eventToEdit && onDelete ? (
             isDeleteConfirm ? (
               <div className="flex items-center gap-2 animate-in">
                 <button 
                   type="button" 
                   onClick={(e) => { e.preventDefault(); onDelete(eventToEdit.id); }} 
-                  className="flex items-center gap-2 px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-bold shadow-md transition-all"
+                  className="flex items-center justify-center gap-2 px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-bold shadow-md transition-all flex-1 sm:flex-none"
                 >
                   <Trash2 size={16} /> Confirm
                 </button>
@@ -229,24 +229,24 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({
               <button 
                 type="button" 
                 onClick={(e) => { e.preventDefault(); setIsDeleteConfirm(true); }} 
-                className="flex items-center gap-2 px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-sm font-bold border border-red-100 transition-all"
+                className="flex items-center justify-center gap-2 px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-sm font-bold border border-red-100 transition-all"
               >
                 <Trash2 size={16} /> Delete
               </button>
             )
-          ) : <div />}
+          ) : <div className="hidden sm:block" />}
           
           <div className="flex gap-2">
             <button 
               type="button" 
               onClick={onClose} 
-              className="px-4 py-2 text-muted-foreground text-sm font-bold hover:bg-muted rounded-lg transition-all"
+              className="flex-1 sm:flex-none px-4 py-2 text-muted-foreground text-sm font-bold hover:bg-muted rounded-lg transition-all"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="px-6 py-2 bg-primary text-primary-foreground text-sm font-bold rounded-lg shadow-lg hover:opacity-90 transition-all"
+              className="flex-1 sm:flex-none px-6 py-2 bg-primary text-primary-foreground text-sm font-bold rounded-lg shadow-lg hover:opacity-90 transition-all"
             >
               {eventToEdit ? 'Save Changes' : 'Add Event'}
             </button>

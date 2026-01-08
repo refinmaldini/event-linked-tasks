@@ -60,8 +60,8 @@ export const EventListView: React.FC<EventListViewProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {sortedEvents.map(event => {
           const typeConfig = eventTypes.find(t => t.id === event.type);
           const style = getEventTypeStyle(event.type);
@@ -70,50 +70,50 @@ export const EventListView: React.FC<EventListViewProps> = ({
             <div 
               key={event.id}
               onClick={() => onEventClick(event)}
-              className={`bg-card rounded-2xl shadow-sm border border-border overflow-hidden cursor-pointer hover:shadow-lg transition-all group`}
+              className={`bg-card rounded-xl sm:rounded-2xl shadow-sm border border-border overflow-hidden cursor-pointer hover:shadow-lg transition-all group`}
             >
               {/* Header with date */}
-              <div className={`${style.bg} ${style.border} border-b p-4`}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className={`text-xs font-bold uppercase ${style.text} px-2 py-0.5 rounded-full ${style.bg} border ${style.border}`}>
+              <div className={`${style.bg} ${style.border} border-b p-3 sm:p-4`}>
+                <div className="flex items-center justify-between mb-1 sm:mb-2">
+                  <span className={`text-[10px] sm:text-xs font-bold uppercase ${style.text} px-1.5 sm:px-2 py-0.5 rounded-full ${style.bg} border ${style.border}`}>
                     {typeConfig?.label || event.type}
                   </span>
-                  <CalendarDays size={16} className={style.text} />
+                  <CalendarDays size={14} className={`sm:w-4 sm:h-4 ${style.text}`} />
                 </div>
-                <p className={`text-lg font-bold ${style.text}`}>
+                <p className={`text-sm sm:text-lg font-bold ${style.text}`}>
                   {formatDateRange(event.date, event.endDate)}
                 </p>
               </div>
 
               {/* Body */}
-              <div className="p-4">
-                <h3 className="font-bold text-foreground text-lg mb-2 group-hover:text-primary transition-colors">
+              <div className="p-3 sm:p-4">
+                <h3 className="font-bold text-foreground text-base sm:text-lg mb-1 sm:mb-2 group-hover:text-primary transition-colors line-clamp-1">
                   {event.title}
                 </h3>
                 
                 {event.clientName && (
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
-                    <Briefcase size={14} />
-                    {event.clientName}
+                  <div className="flex items-center gap-2 text-muted-foreground text-xs sm:text-sm mb-1.5 sm:mb-2">
+                    <Briefcase size={12} className="sm:w-3.5 sm:h-3.5 flex-shrink-0" />
+                    <span className="truncate">{event.clientName}</span>
                   </div>
                 )}
                 
-                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-3">
-                  <Clock size={14} />
+                <div className="flex items-center gap-2 text-muted-foreground text-xs sm:text-sm mb-2 sm:mb-3">
+                  <Clock size={12} className="sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                   {event.startTime} - {event.endTime}
                 </div>
                 
                 {event.location && (
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-3">
-                    <MapPin size={14} />
+                  <div className="flex items-center gap-2 text-muted-foreground text-xs sm:text-sm mb-2 sm:mb-3">
+                    <MapPin size={12} className="sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                     <span className="truncate">{event.location}</span>
                   </div>
                 )}
                 
                 {/* Attendees */}
                 {event.attendees && event.attendees.length > 0 && (
-                  <div className="flex items-center gap-2 pt-3 border-t border-border">
-                    <Users size={14} className="text-muted-foreground" />
+                  <div className="flex items-center gap-2 pt-2 sm:pt-3 border-t border-border">
+                    <Users size={12} className="sm:w-3.5 sm:h-3.5 text-muted-foreground flex-shrink-0" />
                     <div className="flex -space-x-2">
                       {event.attendees.slice(0, 4).map(id => {
                         const user = getUser(id);
@@ -122,12 +122,12 @@ export const EventListView: React.FC<EventListViewProps> = ({
                             key={id}
                             src={user.avatar} 
                             alt={user.name}
-                            className="w-6 h-6 rounded-full border-2 border-card"
+                            className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-card"
                           />
                         ) : null;
                       })}
                       {event.attendees.length > 4 && (
-                        <div className="w-6 h-6 rounded-full bg-muted text-muted-foreground text-[10px] font-bold flex items-center justify-center border-2 border-card">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-muted text-muted-foreground text-[9px] sm:text-[10px] font-bold flex items-center justify-center border-2 border-card">
                           +{event.attendees.length - 4}
                         </div>
                       )}
@@ -141,12 +141,12 @@ export const EventListView: React.FC<EventListViewProps> = ({
         
         <button 
           onClick={onAddEvent}
-          className="border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-all min-h-[300px]"
+          className="border-2 border-dashed border-border rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-all min-h-[200px] sm:min-h-[300px]"
         >
-          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4 group-hover:bg-accent">
-            <Plus size={24} />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-full flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent">
+            <Plus size={20} className="sm:w-6 sm:h-6" />
           </div>
-          <span className="font-bold">Schedule Event</span>
+          <span className="font-bold text-sm sm:text-base">Schedule Event</span>
         </button>
       </div>
     </div>

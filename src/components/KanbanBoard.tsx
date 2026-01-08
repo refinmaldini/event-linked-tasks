@@ -117,7 +117,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   };
   
   return (
-    <div className="flex gap-6 h-full overflow-x-auto pb-4 snap-x">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-6 h-full md:overflow-x-auto pb-4 md:snap-x">
       {columns.map((col) => {
         const theme = THEME_STYLES[col.theme] || THEME_STYLES.default;
         const columnTasks = getTasksByStatus(col.id);
@@ -125,7 +125,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         return (
           <div
             key={col.id}
-            className="flex flex-col h-full min-w-[300px] flex-1 snap-center"
+            className="flex flex-col h-full min-w-0 md:min-w-[280px] lg:min-w-[320px] flex-1 md:snap-center"
             onDrop={(e) => handleDrop(e, col.id)}
             onDragOver={handleDragOver}
           >
