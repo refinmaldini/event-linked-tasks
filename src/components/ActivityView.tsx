@@ -28,36 +28,36 @@ export const ActivityView: React.FC<ActivityViewProps> = ({ activities }) => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
-          <History size={24} />
+    <div className="max-w-3xl mx-auto px-0 sm:px-4">
+      <div className="flex items-center gap-3 mb-4 sm:mb-6">
+        <div className="p-2 sm:p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+          <History size={20} className="sm:w-6 sm:h-6" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Activity Log</h2>
-          <p className="text-muted-foreground">Track recent team changes and updates.</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground">Activity Log</h2>
+          <p className="text-muted-foreground text-sm hidden sm:block">Track recent team changes and updates.</p>
         </div>
       </div>
 
       <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
         {sortedActivities.length === 0 ? (
-          <div className="p-12 text-center text-muted-foreground flex flex-col items-center">
-            <History size={48} className="mb-4 opacity-20" />
-            <p>No activity recorded yet.</p>
+          <div className="p-8 sm:p-12 text-center text-muted-foreground flex flex-col items-center">
+            <History size={40} className="sm:w-12 sm:h-12 mb-4 opacity-20" />
+            <p className="text-sm sm:text-base">No activity recorded yet.</p>
           </div>
         ) : (
           <div className="divide-y divide-border">
             {sortedActivities.map(activity => (
-              <div key={activity.id} className="p-4 flex gap-4 hover:bg-muted/50 transition-colors">
-                <img src={activity.userAvatar} alt={activity.userName} className="w-10 h-10 rounded-full border border-border mt-1" />
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <p className="text-sm text-foreground">
+              <div key={activity.id} className="p-3 sm:p-4 flex gap-3 sm:gap-4 hover:bg-muted/50 transition-colors">
+                <img src={activity.userAvatar} alt={activity.userName} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-border mt-0.5 sm:mt-1 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
+                    <p className="text-xs sm:text-sm text-foreground">
                       <span className="font-bold">{activity.userName}</span>
                       <span className="text-muted-foreground mx-1">{activity.action}</span>
-                      <span className="font-medium text-foreground">"{activity.target}"</span>
+                      <span className="font-medium text-foreground break-words">"{activity.target}"</span>
                     </p>
-                    <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
+                    <span className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">
                       {formatTime(activity.timestamp)}
                     </span>
                   </div>
@@ -65,7 +65,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({ activities }) => {
                     <div className="bg-muted p-1 rounded-md">
                       {getIcon(activity.action)}
                     </div>
-                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">
+                    <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wide">
                       {activity.type}
                     </span>
                   </div>

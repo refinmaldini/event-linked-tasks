@@ -309,31 +309,32 @@ const Index: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {/* GLOBAL ADD TASK BUTTON - Always visible */}
           <button 
             onClick={handleGlobalAddTask}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-all text-sm"
+            className="bg-primary text-primary-foreground px-2 sm:px-4 py-2 rounded-lg font-bold flex items-center gap-1 sm:gap-2 shadow-lg hover:opacity-90 transition-all text-xs sm:text-sm"
           >
-            <Plus size={18} /> {t('addTask')}
+            <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <span className="hidden sm:inline">{t('addTask')}</span>
           </button>
 
           {/* Settings Menu */}
           <SettingsMenu />
 
-          <div className="bg-muted rounded-full px-3 py-1.5 flex items-center gap-2 ml-2">
-            <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold uppercase">
+          <div className="bg-muted rounded-full px-2 sm:px-3 py-1 sm:py-1.5 flex items-center gap-1 sm:gap-2">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold uppercase">
               {currentUser.name[0]}
             </div>
-            <span className="text-sm font-medium hidden sm:inline text-foreground">{currentUser.name}</span>
+            <span className="text-sm font-medium hidden md:inline text-foreground">{currentUser.name}</span>
           </div>
           
           <button 
             onClick={handleLogout} 
-            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors" 
+            className="p-1.5 sm:p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors" 
             title={t('logout')}
           >
-            <LogOut size={18} />
+            <LogOut size={16} className="sm:w-[18px] sm:h-[18px]" />
           </button>
         </div>
       </nav>
@@ -355,39 +356,43 @@ const Index: React.FC = () => {
         ))}
       </div>
 
-      <main className="max-w-7xl mx-auto p-4 md:p-8">
-        <header className="mb-8 flex flex-col md:flex-row justify-between items-end gap-4">
+      <main className="max-w-7xl mx-auto p-3 sm:p-4 md:p-8">
+        <header className="mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 sm:gap-4">
           <div>
-            <h1 className="text-3xl font-bold capitalize">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize">
               {NAV_ITEMS.find(i => i.id === activeTab)?.label}
             </h1>
-          <p className="text-muted-foreground flex items-center gap-2">
-              <Briefcase size={14} /> {t('mainWorkspace')}
+            <p className="text-muted-foreground flex items-center gap-2 text-sm">
+              <Briefcase size={12} className="sm:w-[14px] sm:h-[14px]" /> {t('mainWorkspace')}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
             {activeTab === 'events' && (
               <>
                 <button 
                   onClick={() => setIsEventTypeModalOpen(true)} 
-                  className="bg-muted text-foreground px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-muted/80 transition-colors"
+                  className="bg-muted text-foreground px-2 sm:px-4 py-2 rounded-lg font-medium flex items-center gap-1 sm:gap-2 hover:bg-muted/80 transition-colors text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                 >
-                  <Settings2 size={18} /> {t('manageEventTypes')}
+                  <Settings2 size={16} className="sm:w-[18px] sm:h-[18px]" />
+                  <span className="hidden sm:inline">{t('manageEventTypes')}</span>
+                  <span className="sm:hidden">Types</span>
                 </button>
                 <button 
                   onClick={() => { setEditingEvent(null); setIsEventModalOpen(true); }} 
-                  className="bg-foreground text-background px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-colors"
+                  className="bg-foreground text-background px-3 sm:px-5 py-2 rounded-lg font-bold flex items-center gap-1 sm:gap-2 shadow-lg hover:opacity-90 transition-colors text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                 >
-                  <Plus size={18} /> {t('addEvent')}
+                  <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+                  <span className="hidden sm:inline">{t('addEvent')}</span>
+                  <span className="sm:hidden">Event</span>
                 </button>
               </>
             )}
             {activeTab === 'team' && currentUser.role === 'Owner' && (
               <button 
                 onClick={() => { setEditingUser(null); setIsUserModalOpen(true); }} 
-                className="bg-foreground text-background px-5 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:opacity-90 transition-colors"
+                className="bg-foreground text-background px-3 sm:px-5 py-2 rounded-lg font-bold flex items-center gap-1 sm:gap-2 shadow-lg hover:opacity-90 transition-colors text-xs sm:text-sm"
               >
-                <Plus size={18} /> {t('addMember')}
+                <Plus size={16} className="sm:w-[18px] sm:h-[18px]" /> {t('addMember')}
               </button>
             )}
           </div>
